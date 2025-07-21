@@ -15,7 +15,7 @@ const StationeryDetails = () => {
   useEffect(() => {
     const fetchStationery = async () => {
       try {
-        const res = await axios.get(`http://192.168.117.93:5000/api/stationery/${id}`);
+        const res = await axios.get(`http://localhost:5000/api/stationery/${id}`);
         setItem(res.data);
       } catch (err) {
         console.error("Error fetching stationery item:", err);

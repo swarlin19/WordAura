@@ -19,7 +19,7 @@ const UserProfile = () => {
 
   const fetchOrders = async (email) => {
     try {
-      const res = await axios.get(`http://192.168.117.93:5000/api/orders?email=${email}`);
+      const res = await axios.get(`http://localhost:5000/api/orders?email=${email}`);
       setOrders(res.data);
     } catch (err) {
       console.error("Error fetching orders:", err);
@@ -37,7 +37,7 @@ const UserProfile = () => {
     if (!confirmDelete) return;
 
     try {
-      await axios.delete("http://192.168.117.93:5000/api/delete-user", {
+      await axios.delete("http://localhost:5000/api/delete-user", {
         data: { email: user.email },
       });
       alert("Account deleted successfully.");

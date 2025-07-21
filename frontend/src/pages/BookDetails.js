@@ -15,7 +15,7 @@ const BookDetails = () => {
   useEffect(() => {
     const fetchBook = async () => {
       try {
-        const res = await axios.get(`http://192.168.117.93:5000/api/books/${id}`);
+        const res = await axios.get(`http://localhost:5000/api/books/${id}`);
         setBook(res.data);
         setLoading(false);
 

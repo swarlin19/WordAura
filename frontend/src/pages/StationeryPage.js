@@ -14,7 +14,7 @@ const StationeryPage = () => {
     const fetchItems = async () => {
       try {
         const endpoint = typeParam ? `/api/stationery/type/${typeParam}` : '/api/stationery';
-        const res = await axios.get(`http://192.168.117.93:5000${endpoint}`);
+        const res = await axios.get(`http://localhost:5000${endpoint}`);
         setItems(res.data);
         setType(typeParam || 'all');
       } catch (error) {

@@ -11,7 +11,7 @@ const Signup = () => {
   const handleSignup = async (e) => {
     e.preventDefault();
     try {
-      await axios.post("http://192.168.117.93:5000/signup", {
+      await axios.post("http://localhost:5000/signup", {
         username,
         email,
         password,

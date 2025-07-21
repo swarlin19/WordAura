@@ -14,7 +14,7 @@ const BooksPage = () => {
     const fetchBooks = async () => {
       try {
         const endpoint = genreParam ? `/api/books/genre/${genreParam}` : '/api/books';
-        const res = await axios.get(`http://192.168.117.93:5000${endpoint}`);
+        const res = await axios.get(`http://localhost:5000${endpoint}`);
         setBooks(res.data);
         setGenre(genreParam || 'all');
       } catch (error) {

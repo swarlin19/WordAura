@@ -124,7 +124,7 @@ const OrderNow = () => {
     const trackingId = `TRK${Math.floor(Math.random() * 1000000)}`;
 
     try {
-      await axios.post("http://192.168.117.93:5000/api/save-order", {
+      await axios.post("http://localhost:5000/api/save-order", {
         orderId,
         transactionId: transactionId || fallbackTransactionId,
         trackingId,

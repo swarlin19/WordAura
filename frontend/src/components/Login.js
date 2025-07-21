@@ -16,7 +16,7 @@ const Login = () => {
   const handleLogin = async (e) => {
     e.preventDefault();
     try {
-      const res = await axios.post('http://192.168.117.93:5000/login', formData);
+      const res = await axios.post('http://localhost:5000/login', formData);
       if (res.data.token) {
         localStorage.setItem('token', res.data.token);
         localStorage.setItem('user', JSON.stringify(res.data.user));

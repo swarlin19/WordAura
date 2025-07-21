@@ -43,7 +43,7 @@ const OrderNow = () => {
     if (!email) return;
     const fetchAddresses = async () => {
       try {
-        const res = await axios.get(`http://192.168.117.93:5000/api/saved-addresses/${email}`);
+        const res = await axios.get(`http://localhost:5000/api/saved-addresses/${email}`);
         setSavedAddresses(res.data);
         const recent = JSON.parse(localStorage.getItem("selected_address"));
         if (recent) {
@@ -69,7 +69,7 @@ const OrderNow = () => {
 
   const handleGenerateUPI = async () => {
     try {
-      const res = await axios.post("http://192.168.117.93:5000/api/generate-upi-link", {
+      const res = await axios.post("http://localhost:5000/api/generate-upi-link", {
         amount: totalPrice,
         orderId: `order_${Date.now()}`,
       });
@@ -81,7 +81,7 @@ const OrderNow = () => {
 
   const handleRazorpayPayment = async () => {
     try {
-      const orderResponse = await axios.post("http://192.168.117.93:5000/api/create-order", {
+      const orderResponse = await axios.post("http://localhost:5000/api/create-order", {
         amount: totalPrice,
         receipt: `order_${Date.now()}`
       });

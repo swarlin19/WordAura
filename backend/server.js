@@ -24,9 +24,9 @@ let db;
 const connectDB = async () => {
   try {
     db = await mysql.createConnection({
-      host: 'localhost',
-      user: 'root',
-      password: 'RYSF@rysf123',
+      host: 'database-1.cr2ue6u44sny.eu-north-1.rds.amazonaws.com',
+      user: 'admin',
+      password: 'ramchin123',
       database: 'bookstore',
     });
     console.log('✅ Connected to MySQL (bookstore)');

@@ -9,6 +9,7 @@ const StationeryDetails = () => {
   const [item, setItem] = useState(null);
   const [quantity, setQuantity] = useState(1);
   const [wishlist, setWishlist] = useState(false);
+  const [base64Img, setBase64Img] = useState(""); // 🔥 store base64 image
   const navigate = useNavigate();
   const { cartItems, setCartItems } = useCart();
 
@@ -17,6 +18,10 @@ const StationeryDetails = () => {
       try {
         const res = await axios.get(`http://localhost:5000/api/stationery/${id}`);
         setItem(res.data);
+
+        // fetch base64 image from backend
+        const imgRes = await axios.get(`http://localhost:5000/api/image-base64/${res.data.image}`);
+        setBase64Img(imgRes.data.image);
       } catch (err) {
         console.error("Error fetching stationery item:", err);
       }
@@ -92,7 +97,7 @@ const StationeryDetails = () => {
         {/* Left Image */}
         <div className="md:w-1/2 bg-pink-50 flex items-center justify-center p-6">
           <img
-            src={`/images/${item.image}`}
+            src={base64Img || "https://via.placeholder.com/250x350?text=Loading..."}
             alt={item.name}
             className="w-[250px] h-[350px] object-contain rounded-lg shadow-md"
           />
@@ -103,7 +108,11 @@ const StationeryDetails = () => {
           <div className="flex justify-between items-start mb-4">
             <h2 className="text-3xl font-bold text-pink-700">{item.name}</h2>
             <button onClick={toggleWishlist} className="text-2xl">
-              {wishlist ? <FaHeart className="text-pink-500" /> : <FaRegHeart className="text-gray-400" />}
+              {wishlist ? (
+                <FaHeart className="text-pink-500" />
+              ) : (
+                <FaRegHeart className="text-gray-400" />
+              )}
             </button>
           </div>
 

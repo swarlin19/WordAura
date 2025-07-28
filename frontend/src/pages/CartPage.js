@@ -1,13 +1,33 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { useCart } from "../context/CartContext";
 import { Link, useNavigate } from "react-router-dom";
 import { FaTrash } from "react-icons/fa";
+import axios from "axios";
 
 const CartPage = () => {
   const { cartItems, removeFromCart, updateQuantity } = useCart();
+  const [imageMap, setImageMap] = useState({});
   const navigate = useNavigate();
 
   const totalPrice = cartItems.reduce((acc, item) => acc + item.price * item.quantity, 0);
+
+  // 🔥 Fetch base64 images
+  useEffect(() => {
+    const fetchImages = async () => {
+      for (const item of cartItems) {
+        if (item.image && !imageMap[item.image]) {
+          try {
+            const res = await axios.get(`http://localhost:5000/api/image-base64/${item.image}`);
+            setImageMap((prev) => ({ ...prev, [item.image]: res.data.image }));
+          } catch (err) {
+            console.error("Failed to load image", err);
+          }
+        }
+      }
+    };
+
+    fetchImages();
+  }, [cartItems, imageMap]);
 
   const handlePlaceOrder = () => {
     const orderData = {
@@ -15,7 +35,6 @@ const CartPage = () => {
       orderDate: new Date().toLocaleDateString(),
       transactionId: "TXN" + Math.floor(Math.random() * 100000),
       trackingId: "TRK" + Math.floor(Math.random() * 100000),
-
       customer: {
         name: "Swarlin B",
         email: "swarlin@example.com",
@@ -59,8 +78,11 @@ const CartPage = () => {
                 className="flex flex-col sm:flex-row bg-pink-50 shadow-md rounded-xl p-4 gap-4 hover:shadow-lg transition"
               >
                 <img
-                  src={`/images/${item.image}`}
-                  alt={item.title}
+                  src={
+                    imageMap[item.image] ||
+                    "https://via.placeholder.com/120x160?text=Loading..."
+                  }
+                  alt={item.title || item.name}
                   className="w-[120px] h-[160px] object-cover rounded-lg shadow"
                 />
                 <div className="flex-1 flex flex-col">

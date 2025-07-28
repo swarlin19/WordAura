@@ -1,9 +1,53 @@
 // src/pages/HomePage.jsx
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import Navbar from '../components/Navbar';
+import axios from 'axios';
+
+const genreImages = [
+  { genre: "romance", label: "Romance", img: "romance.png" },
+  { genre: "horror", label: "Horror", img: "horror.png" },
+  { genre: "thriller", label: "Thriller", img: "thriller.png" },
+  { genre: "comedy", label: "Comedy", img: "comedy.png" },
+  { genre: "motivation", label: "Motivation", img: "motivation.png" },
+];
+
+const stationeryImages = [
+  { type: "Pens", label: "Pens", img: "pens.jpg" },
+  { type: "Notebook", label: "Notebook", img: "journals.jpg" },
+  { type: "Sticky Notes", label: "Sticky Notes", img: "notes.jpeg" },
+  { type: "Highlighters", label: "Highlighters", img: "highlighters.jpg" },
+];
 
 const HomePage = () => {
+  const [genreImgs, setGenreImgs] = useState({});
+  const [stationeryImgs, setStationeryImgs] = useState({});
+
+  const fetchImage = async (filename) => {
+    const res = await axios.get(`http://localhost:5000/api/image-base64/${filename}`);
+    return res.data.image;
+  };
+
+  useEffect(() => {
+    const loadImages = async () => {
+      const genreObj = {};
+      const stationeryObj = {};
+
+      for (let item of genreImages) {
+        genreObj[item.img] = await fetchImage(item.img);
+      }
+
+      for (let item of stationeryImages) {
+        stationeryObj[item.img] = await fetchImage(item.img);
+      }
+
+      setGenreImgs(genreObj);
+      setStationeryImgs(stationeryObj);
+    };
+
+    loadImages();
+  }, []);
+
   return (
     <div className="bg-[#d9f2e6] font-poppins min-h-screen">
       <Navbar />
@@ -36,16 +80,10 @@ const HomePage = () => {
           Explore by Book Genre
         </h2>
         <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-6 justify-center max-w-6xl mx-auto">
-          {[
-            { genre: "romance", label: "Romance", img: "/romance.png" },
-            { genre: "horror", label: "Horror", img: "/horror.png" },
-            { genre: "thriller", label: "Thriller", img: "/thriller.png" },
-            { genre: "comedy", label: "Comedy", img: "/comedy.png" },
-            { genre: "motivation", label: "Motivation", img: "/motivation.png" },
-          ].map(({ genre, label, img }) => (
+          {genreImages.map(({ genre, label, img }) => (
             <Link key={genre} to={`/books/${genre}`} className="text-center">
               <img
-                src={img}
+                src={genreImgs[img]}
                 alt={label}
                 className="w-[140px] h-[140px] sm:w-[160px] sm:h-[160px] rounded-xl object-cover shadow hover:scale-105 transition mx-auto"
               />
@@ -61,15 +99,10 @@ const HomePage = () => {
           Stationery Preview
         </h2>
         <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-6 justify-center max-w-6xl mx-auto">
-          {[
-            { type: "Pens", label: "Pens", img: "/pens.jpg" },
-            { type: "Notebook", label: "Notebook", img: "/journals.jpg" },
-            { type: "Sticky Notes", label: "Sticky Notes", img: "/notes.jpeg" },
-            { type: "Highlighters", label: "Highlighters", img: "/highlighters.jpg" },
-          ].map(({ type, label, img }) => (
+          {stationeryImages.map(({ type, label, img }) => (
             <Link key={type} to={`/stationery/${type}`} className="text-center">
               <img
-                src={img}
+                src={stationeryImgs[img]}
                 alt={label}
                 className="w-[140px] h-[140px] sm:w-[160px] sm:h-[160px] rounded-xl object-cover shadow hover:scale-105 transition mx-auto"
               />

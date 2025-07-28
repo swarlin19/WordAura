@@ -7,22 +7,42 @@ const StationeryPage = () => {
   const [items, setItems] = useState([]);
   const [type, setType] = useState('all');
   const [searchTerm, setSearchTerm] = useState('');
+  const [imageMap, setImageMap] = useState({}); // 🔥 Store base64 images
+
   const { type: typeParam } = useParams();
   const navigate = useNavigate();
 
   useEffect(() => {
+    // 🔥 Fetch image inside to avoid ESLint warning
+    const fetchBase64Image = async (filename) => {
+      if (!filename || imageMap[filename]) return;
+
+      try {
+        const res = await axios.get(`http://localhost:5000/api/image-base64/${filename}`);
+        setImageMap((prev) => ({ ...prev, [filename]: res.data.image }));
+      } catch (err) {
+        console.error(`Failed to load image ${filename}`, err);
+      }
+    };
+
     const fetchItems = async () => {
       try {
         const endpoint = typeParam ? `/api/stationery/type/${typeParam}` : '/api/stationery';
         const res = await axios.get(`http://localhost:5000${endpoint}`);
         setItems(res.data);
         setType(typeParam || 'all');
+
+        // 🔥 Load base64 images
+        res.data.forEach((item) => {
+          fetchBase64Image(item.image);
+        });
       } catch (error) {
         console.error('Error fetching stationery:', error);
       }
     };
+
     fetchItems();
-  }, [typeParam]);
+  }, [typeParam, imageMap]);
 
   const filteredItems = items.filter((item) =>
     item.name.toLowerCase().includes(searchTerm.toLowerCase())
@@ -82,7 +102,10 @@ const StationeryPage = () => {
               >
                 <div className="h-[200px] flex items-center justify-center overflow-hidden rounded-lg">
                   <img
-                    src={`/images/${item.image}`}
+                    src={
+                      imageMap[item.image] ||
+                      "https://via.placeholder.com/160x200?text=Loading..."
+                    }
                     alt={item.name}
                     className="h-full object-contain"
                   />

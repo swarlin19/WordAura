@@ -7,22 +7,42 @@ const BooksPage = () => {
   const [books, setBooks] = useState([]);
   const [genre, setGenre] = useState('all');
   const [searchTerm, setSearchTerm] = useState('');
+  const [imageMap, setImageMap] = useState({}); // 🔥 Store base64 images
+
   const { genre: genreParam } = useParams();
   const navigate = useNavigate();
 
   useEffect(() => {
+    // ✅ Move this inside to avoid ESLint warning
+    const fetchBase64Image = async (filename) => {
+      if (!filename || imageMap[filename]) return;
+
+      try {
+        const res = await axios.get(`http://localhost:5000/api/image-base64/${filename}`);
+        setImageMap((prev) => ({ ...prev, [filename]: res.data.image }));
+      } catch (err) {
+        console.error(`Failed to load image ${filename}`, err);
+      }
+    };
+
     const fetchBooks = async () => {
       try {
         const endpoint = genreParam ? `/api/books/genre/${genreParam}` : '/api/books';
         const res = await axios.get(`http://localhost:5000${endpoint}`);
         setBooks(res.data);
         setGenre(genreParam || 'all');
+
+        // 🔥 Load base64 images
+        res.data.forEach((book) => {
+          fetchBase64Image(book.image);
+        });
       } catch (error) {
         console.error('Error fetching books:', error);
       }
     };
+
     fetchBooks();
-  }, [genreParam]);
+  }, [genreParam, imageMap]);
 
   const filteredBooks = books.filter((book) =>
     book.title.toLowerCase().includes(searchTerm.toLowerCase())
@@ -85,7 +105,10 @@ const BooksPage = () => {
               >
                 <div className="h-[200px] flex items-center justify-center overflow-hidden rounded-lg">
                   <img
-                    src={`/images/${book.image}`}
+                    src={
+                      imageMap[book.image] ||
+                      "https://via.placeholder.com/160x200?text=Loading..."
+                    }
                     alt={book.title}
                     className="h-full object-contain"
                   />
@@ -94,7 +117,9 @@ const BooksPage = () => {
                 <div className="mt-4 flex-grow">
                   <h3 className="text-lg font-semibold text-gray-700">{book.title}</h3>
                   <p className="text-sm text-gray-500 italic">by {book.author}</p>
-                  <p className="text-pink-600 font-medium mt-1">₹ {parseFloat(book.price).toFixed(2)}</p>
+                  <p className="text-pink-600 font-medium mt-1">
+                    ₹ {parseFloat(book.price).toFixed(2)}
+                  </p>
                   <p className={`text-sm mt-1 ${book.stock > 0 ? 'text-green-600' : 'text-red-500'}`}>
                     {book.stock > 0 ? 'In Stock' : 'Out of Stock'}
                   </p>

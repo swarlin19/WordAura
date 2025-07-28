@@ -1,9 +1,31 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
+import axios from "axios";
 
 const Wishlist = () => {
   const navigate = useNavigate();
-  const wishlistItems = JSON.parse(localStorage.getItem("wishlist")) || [];
+  const [wishlistItems, setWishlistItems] = useState([]);
+  const [imageMap, setImageMap] = useState({}); // 🔥 map to store base64 images
+
+  useEffect(() => {
+    const items = JSON.parse(localStorage.getItem("wishlist")) || [];
+    setWishlistItems(items);
+
+    const fetchImages = async () => {
+      for (const item of items) {
+        if (item.image && !imageMap[item.image]) {
+          try {
+            const res = await axios.get(`http://localhost:5000/api/image-base64/${item.image}`);
+            setImageMap((prev) => ({ ...prev, [item.image]: res.data.image }));
+          } catch (err) {
+            console.error(`Failed to load image: ${item.image}`, err);
+          }
+        }
+      }
+    };
+
+    fetchImages();
+  }, [imageMap]);
 
   const handleRemove = (index) => {
     const updated = [...wishlistItems];
@@ -28,15 +50,18 @@ const Wishlist = () => {
               className="w-[260px] bg-[#ffe9f4] rounded-2xl p-4 text-center shadow-lg flex flex-col justify-between transition-transform hover:-translate-y-1"
             >
               <img
-                src={`/images/${item.image}`}
-                alt={item.title}
-                className="w-full h-[180px] object-cover rounded-xl mb-4"
+                src={
+                  imageMap[item.image] ||
+                  "https://via.placeholder.com/160x180?text=Loading..."
+                }
+                alt={item.title || item.name}
+                className="w-full h-[180px] object-contain rounded-xl mb-4"
               />
               <h3 className="text-base font-semibold text-[#4b2042]">
                 {item.title || item.name}
               </h3>
               <p className="text-sm font-semibold text-gray-700 my-2">
-                ₹{item.price}
+                ₹{parseFloat(item.price).toFixed(2)}
               </p>
               <button
                 onClick={() => handleRemove(index)}

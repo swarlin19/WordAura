@@ -11,6 +11,7 @@ const BookDetails = () => {
   const [quantity, setQuantity] = useState(1);
   const { cartItems, setCartItems } = useCart();
   const [wishlist, setWishlist] = useState(false);
+  const [base64Img, setBase64Img] = useState(""); // 🔥 base64 image
 
   useEffect(() => {
     const fetchBook = async () => {
@@ -22,6 +23,10 @@ const BookDetails = () => {
         const storedWishlist = JSON.parse(localStorage.getItem('wishlist')) || [];
         const alreadyWishlisted = storedWishlist.some(item => item.id === res.data.id);
         setWishlist(alreadyWishlisted);
+
+        // 🔥 Fetch base64 image
+        const imgRes = await axios.get(`http://localhost:5000/api/image-base64/${res.data.image}`);
+        setBase64Img(imgRes.data.image);
       } catch (err) {
         console.error('Error fetching book:', err);
         setLoading(false);
@@ -97,7 +102,7 @@ const BookDetails = () => {
       <div className="max-w-6xl mx-auto bg-white rounded-3xl shadow-xl flex flex-col md:flex-row overflow-hidden transition">
         <div className="md:w-1/2 p-8 bg-pink-50 flex justify-center items-center">
           <img
-            src={`/images/${book.image}`}
+            src={base64Img || "https://via.placeholder.com/250x360?text=Loading..."}
             alt={book.title}
             className="w-[250px] h-[360px] object-contain rounded-xl shadow-md"
           />

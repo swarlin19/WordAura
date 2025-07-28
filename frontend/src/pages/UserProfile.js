@@ -5,7 +5,6 @@ import { useNavigate } from "react-router-dom";
 const UserProfile = () => {
   const navigate = useNavigate();
   const [user, setUser] = useState({});
-  const [orders, setOrders] = useState([]);
 
   useEffect(() => {
     const storedUser = JSON.parse(localStorage.getItem("user"));
@@ -13,18 +12,8 @@ const UserProfile = () => {
       navigate("/login");
     } else {
       setUser(storedUser);
-      fetchOrders(storedUser.email);
     }
   }, [navigate]);
-
-  const fetchOrders = async (email) => {
-    try {
-      const res = await axios.get(`http://localhost:5000/api/orders?email=${email}`);
-      setOrders(res.data);
-    } catch (err) {
-      console.error("Error fetching orders:", err);
-    }
-  };
 
   const handleLogout = () => {
     localStorage.removeItem("user");
@@ -86,26 +75,6 @@ const UserProfile = () => {
             🏠 Continue Shopping
           </button>
         </div>
-
-        <hr className="my-10 border-t-2 border-dashed border-pink-200 w-4/5 mx-auto" />
-
-        <h3 className="text-center text-xl font-semibold text-pink-700 mb-4">📦 My Orders</h3>
-
-        {orders.length === 0 ? (
-          <p className="text-center text-gray-500 italic">No orders placed yet.</p>
-        ) : (
-          <ul className="space-y-4">
-            {orders.map((order, i) => (
-              <li key={i} className="bg-pink-50 p-6 rounded-xl shadow-md">
-                <p><strong>Order ID:</strong> {order.orderId}</p>
-                <p><strong>Amount:</strong> ₹{order.totalAmount}</p>
-                <span className="inline-block mt-2 bg-pink-100 text-pink-700 px-3 py-1 text-sm font-semibold rounded-full">
-                  {order.status || "Processing"}
-                </span>
-              </li>
-            ))}
-          </ul>
-        )}
       </div>
     </div>
   );

@@ -124,21 +124,7 @@ const OrderNow = () => {
     const trackingId = `TRK${Math.floor(Math.random() * 1000000)}`;
 
     try {
-      await axios.post("http://13.60.49.86/api/save-order", {
-        orderId,
-        transactionId: transactionId || fallbackTransactionId,
-        trackingId,
-        fullName: shipping.fullName,
-        email: shipping.email,
-        phone: shipping.phone,
-        address: shipping.address,
-        city: shipping.city,
-        zip: shipping.zip,
-        paymentMethod,
-        totalAmount: totalPrice,
-        items: cartItems,
-        user_email: shipping.email,
-      });
+      
 
       navigate("/order-placed", {
         state: {

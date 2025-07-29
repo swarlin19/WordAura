@@ -243,9 +243,9 @@ app.post('/api/save-order', async (req, res) => {
   } = req.body;
 
   const conn = await mysql.createConnection({
-    host: 'localhost',
-    user: 'root',
-    password: 'RYSF@rysf123',
+    host: 'database-1.cr2ue6u44sny.eu-north-1.rds.amazonaws.com',
+    user: 'admin',
+    password: 'ramchin123',
     database: 'bookstore',
   });
 

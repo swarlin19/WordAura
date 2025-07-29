@@ -441,5 +441,5 @@ app.get('/api/image-base64/:filename', (req, res) => {
 /* ---------- START SERVER ---------- */
 const PORT = 5000;
 app.listen(PORT, () => {
-  console.log(`🚀 Server running at http://localhost:${PORT}`);
+  console.log(`🚀 Server running at http://13.60.49.86:${PORT}`);
 });

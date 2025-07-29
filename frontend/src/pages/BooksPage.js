@@ -18,7 +18,7 @@ const BooksPage = () => {
       if (!filename || imageMap[filename]) return;
 
       try {
-        const res = await axios.get(`http://13.60.49.86:5000/api/image-base64/${filename}`);
+        const res = await axios.get(`http://13.60.49.86/api/image-base64/${filename}`);
         setImageMap((prev) => ({ ...prev, [filename]: res.data.image }));
       } catch (err) {
         console.error(`Failed to load image ${filename}`, err);
@@ -28,7 +28,7 @@ const BooksPage = () => {
     const fetchBooks = async () => {
       try {
         const endpoint = genreParam ? `/api/books/genre/${genreParam}` : '/api/books';
-        const res = await axios.get(`http://13.60.49.86:5000${endpoint}`);
+        const res = await axios.get(`http://13.60.49.86${endpoint}`);
         setBooks(res.data);
         setGenre(genreParam || 'all');
 

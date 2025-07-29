@@ -26,7 +26,7 @@ const UserProfile = () => {
     if (!confirmDelete) return;
 
     try {
-      await axios.delete("http://13.60.49.86:5000/api/delete-user", {
+      await axios.delete("http://13.60.49.86/api/delete-user", {
         data: { email: user.email },
       });
       alert("Account deleted successfully.");

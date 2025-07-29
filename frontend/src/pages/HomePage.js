@@ -24,7 +24,7 @@ const HomePage = () => {
   const [stationeryImgs, setStationeryImgs] = useState({});
 
   const fetchImage = async (filename) => {
-    const res = await axios.get(`http://13.60.49.86:5000/api/image-base64/${filename}`);
+    const res = await axios.get(`http://13.60.49.86/api/image-base64/${filename}`);
     return res.data.image;
   };
 

@@ -17,7 +17,7 @@ const CartPage = () => {
       for (const item of cartItems) {
         if (item.image && !imageMap[item.image]) {
           try {
-            const res = await axios.get(`http://13.60.49.86:5000/api/image-base64/${item.image}`);
+            const res = await axios.get(`http://13.60.49.86/api/image-base64/${item.image}`);
             setImageMap((prev) => ({ ...prev, [item.image]: res.data.image }));
           } catch (err) {
             console.error("Failed to load image", err);

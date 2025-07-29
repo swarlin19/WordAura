@@ -85,7 +85,7 @@ const AddAddress = () => {
       localStorage.setItem("selected_address", JSON.stringify(fullData));
 
       // ✅ Save to backend
-      await axios.post("http://http://13.60.49.86/:5000/api/save-address", fullData);
+      await axios.post("http://13.60.49.86/api/save-address", fullData);
 
       alert("Address saved successfully!");
       navigate("/order"); // go back to order page

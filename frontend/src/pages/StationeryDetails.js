@@ -16,11 +16,11 @@ const StationeryDetails = () => {
   useEffect(() => {
     const fetchStationery = async () => {
       try {
-        const res = await axios.get(`http://localhost:5000/api/stationery/${id}`);
+        const res = await axios.get(`http://13.60.49.86:5000/api/stationery/${id}`);
         setItem(res.data);
 
         // fetch base64 image from backend
-        const imgRes = await axios.get(`http://localhost:5000/api/image-base64/${res.data.image}`);
+        const imgRes = await axios.get(`http://13.60.49.86:5000/api/image-base64/${res.data.image}`);
         setBase64Img(imgRes.data.image);
       } catch (err) {
         console.error("Error fetching stationery item:", err);

@@ -24,7 +24,7 @@ const OrderDetails = () => {
         if (item.image && !imageMap[item.image]) {
           try {
             const res = await axios.get(
-              `http://localhost:5000/api/image-base64/${item.image}`
+              `http://13.60.49.86:5000/api/image-base64/${item.image}`
             );
             setImageMap((prev) => ({
               ...prev,

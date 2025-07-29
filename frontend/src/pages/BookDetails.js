@@ -16,7 +16,7 @@ const BookDetails = () => {
   useEffect(() => {
     const fetchBook = async () => {
       try {
-        const res = await axios.get(`http://localhost:5000/api/books/${id}`);
+        const res = await axios.get(`http://13.60.49.86:5000/api/books/${id}`);
         setBook(res.data);
         setLoading(false);
 
@@ -25,7 +25,7 @@ const BookDetails = () => {
         setWishlist(alreadyWishlisted);
 
         // 🔥 Fetch base64 image
-        const imgRes = await axios.get(`http://localhost:5000/api/image-base64/${res.data.image}`);
+        const imgRes = await axios.get(`http://13.60.49.86:5000/api/image-base64/${res.data.image}`);
         setBase64Img(imgRes.data.image);
       } catch (err) {
         console.error('Error fetching book:', err);

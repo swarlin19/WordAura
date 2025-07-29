@@ -18,7 +18,7 @@ const StationeryPage = () => {
       if (!filename || imageMap[filename]) return;
 
       try {
-        const res = await axios.get(`http://localhost:5000/api/image-base64/${filename}`);
+        const res = await axios.get(`http://13.60.49.86:5000/api/image-base64/${filename}`);
         setImageMap((prev) => ({ ...prev, [filename]: res.data.image }));
       } catch (err) {
         console.error(`Failed to load image ${filename}`, err);
@@ -28,7 +28,7 @@ const StationeryPage = () => {
     const fetchItems = async () => {
       try {
         const endpoint = typeParam ? `/api/stationery/type/${typeParam}` : '/api/stationery';
-        const res = await axios.get(`http://localhost:5000${endpoint}`);
+        const res = await axios.get(`http://13.60.49.86:5000${endpoint}`);
         setItems(res.data);
         setType(typeParam || 'all');
 
